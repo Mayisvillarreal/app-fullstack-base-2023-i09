@@ -8,3 +8,26 @@ body {
 main {
     flex: 1 0 auto;
 }
+div>div.col{
+    background-color: bisque;
+    border: 2px solid black;
+
+}
+
+#btnListar{
+    width: 100%;
+}
+.textoError{
+    width: 50%;
+    margin: auto;
+    font-size: x-small;
+    text-align: center;
+    color: red;
+    border: solid 5px chocolate;
+}
+.textoCorrecto{
+    font-size: x-small;
+    text-align: center;
+    color: rgb(71, 161, 73);
+
+}
