@@ -1,10 +1,9 @@
 //=======[ Settings, Imports & Data ]==========================================
 
 var PORT    = 3000;
-
 var express = require('express');
 var cors = require("cors");
-var corsOptions = {origin:"*",optionSucessStatus:200};
+var corsOptions = {origin:"*",optionsSuccessStatuss:200};
 
 
 var app     = express();
@@ -35,45 +34,59 @@ app.get("/otraCosa/:id/:algo",(req,res,next)=>{
     });
     
 });
-app.post("/device",(req,res,next)=>{
-    console.log("Llego el post",
-    "UPDATE Devices SET state = "+req.body.state+" WHERE id = "+req.body.id);
-    if(req.body.name==""){
-        res.status(409).send("no tengo nada que hacer");
-    }else{
-        res.status(200).send("se guardo el dispositivo");
-    }
-    
-});
+
+//________________________________________________________________
+// Obtener los dispositivos de la base de datos
+// _______________________________________________________________
 app.get('/devices/', function(req, res, next) {
-    devices = [
-        { 
-            'id': 1, 
-            'name': 'Lampara 1', 
-            'description': 'Luz living', 
-            'state': 0, 
-            'type': 1, 
-        },
-        { 
-            'id': 2, 
-            'name': 'Ventilador 1', 
-            'description': 'Ventilador Habitacion', 
-            'state': 1, 
-            'type': 2, 
-        },
-        { 
-            'id': 3, 
-            'name': 'TV', 
-            'description': 'TV led Habitacion', 
-            'state': 0, 
-            'type': 3, 
-        }
-    ]
-    res.send(JSON.stringify(devices)).status(200);
+    utils.query('SELECT * FROM Devices', function(err,rsp) {
+        if (err) {
+            res.send(err).status(400);
+            return;}
+            else {
+                res.send(JSON.stringify(rsp)).status(200);}
+            }
+            );
 });
+//________________________________________________________________
+// Agregar un nuevo dispositivo
+// _______________________________________________________________
+
+app.post('/devices/', function(req, res, next) {
+    utils.query('INSERT INTO `Devices` (`name`, `description`, `state`, `type`) VALUES (?, ?, ?, ?)',
+        [req.body.name, req.body.description, req.body.state, req.body.type],
+        function(err, rsp) {
+            if (err) {
+                res.send(err).status(400);
+                return;}
+                else {
+            res.send({ 'id': rsp.insertId }).status(201);}
+        }
+    );
+});
+
+//________________________________________________________________
+//   Eliminar un dispositivo
+//_______________________________________________________________
+
+app.delete('/devices/:id', function(req, res, next) {
+    utils.query('DELETE FROM Devices WHERE id = ?',req.params.id,
+        function(err) {
+            if (err) {
+                res.send(err).status(400);
+                return;}
+                else {
+            res.send("deleted").status(200);
+        }
+    }
+    );
+});
+    
+   
 
 app.listen(PORT, function(req, res) {
     console.log("NodeJS API running correctly");
 });
+
 
 //=======[ End of file ]=======================================================

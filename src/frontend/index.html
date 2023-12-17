@@ -1,123 +1,118 @@
 <!DOCTYPE html>
-  <html>
-    <head>
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <link type="text/css" rel="stylesheet" href="./static/css/materialize.min.css"  media="screen,projection"/>
-      <link type="text/css" rel="stylesheet" href="./static/css/styles.css"  media="screen,projection"/>
-      <script type="text/javascript" src="./static/js/materialize.min.js"></script>
-      <script type="text/javascript" src="js/persona.js"></script>
-      <script type="text/javascript" src="js/usuario.js"></script>
-      <script type="text/javascript" src="js/device.js"></script>
-      <script type="text/javascript" src="js/main.js"></script>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <header>
-            <!-- Navigation bar -->
-            <nav style="background-color:#124580">
-                <div class="nav-wrapper">
-                    <a href="#!" class="brand-logo left" style="margin-left: 15px;">Smart Home</a>
-                    <ul id="nav-mobile" class="right" style="margin-right: 15px;">
-                        <li><a href="#">Help</a></li>
-                    </ul>
-                </div>
-            </nav>	
-        </header>
-        
-        <main>
-            <div class="container">
-                <div class="row">
-                   
-                    <div id="lista" miAtt="true" class="col s12 m6 l6">
-                        <ul class="collection" id="listaDisp">
-                           
-                          
-                        </ul>
-                    </div>
-                     <!-- Modal Trigger -->
-                     <p>
-                        <label>
-                          <input type="checkbox" id="cb"  />
-                          <span>Prender</span>
-                        </label>
-                      </p>
-  <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+<html>
 
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-        <div class="col s12 m6 l6">
-            <h1>Cargar usuario</h1>
-            <label for="iNombre">Nombre de usuario</label>
-            <input id="iNombre" type="text" value="" placeholder="jlopez" />
+<head>
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="./static/css/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="./static/css/styles.css" media="screen,projection" />
+    <script type="text/javascript" src="/js/framework.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="./static/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
 
-            <div class="input-field">
-                <input id="iPassword" type="password" class="validate">
-                <label for="iPassword">Password</label>
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Navigation bar -->
+        <nav style="background-color: hsl(115, 66%, 34%)">
+            <div class="nav-wrapper">
+                <a href="#!" class="brand-logo left" style="margin-left: 15px;">Smart Home</a>
+                <ul id="nav-mobile" class="right" style="margin-right: 15px;">
+                </ul>
             </div>
-            
-            <p>
-                <label>
-                  <input type="checkbox"  />
-                  <span>Recordar usuario y contraseña</span>
-                </label>
-              </p>
-            <p id="pInfo"  ></p>
-            
-            <button id="btnGuardar" class="modal-close  btn">Guardar</button>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <main>
+        <div class="container">
+            <div class="row">
+                             
+                <div id="devices">                       
+                </div>
+               
+
+                <!-- Botón para listar dispositivos -->
+                
+                <div class="row">
+                    <button class="btn waves-effect waves-light button-view" id="btnListar" name="hello_button">Lista de dispositivos</button>
+                </div>
+
+                <!-- Botón para agregar dispositivos -->
+
+                <div class="row">
+                    <button class="btn waves-effect waves-light button-view" id="btnAddDev" name="hello_button">Añadir dispositivo</button>
+                </div>
+
+                </div>
+
+                <!-- Botón para eliminar dispositivos -->
+
+                <div class="row">
+                    <button class="btn waves-effect waves-light button-view" id="btnDelDev" name="hello_button">Eliminar dispositivo</button>
+                </div>
+
+                </div>
+
+               <!-- Modal para añadir dispositivos -->
+                
+                <div id="modaladd" class="modal modal-fixed-footer">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Nuevo dispositivo</h4>
+                        </div>
+                        <div class="row">
+                            <!-- Campos para el nuevo dispositivo (nombre, descripción, tipo) -->
+                            <div class="input-field col s6">
+                                <input id="txt-name" type="text" class="validate">
+                                <label for="txt-name">Nombre</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input id="txt-description" type="text" class="validate">
+                                <label for="txt-description">Descripción</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <select id="select-type">
+                                    <option value="" disabled selected>Seleccione</option>
+                                    <option value="1">Alarma</option>
+                                    <option value="2">Lámpara</option>
+                                    <option value="3">Persiana</option>
+                                    <option value="4">Televisor</option>
+                                    <option value="5">Ventilador</option>
+                                </select>
+                                <label>Tipo de dispositivo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-close waves-effect waves-green btn-flat" id="btnGuardar">Guardar</button>
+                    </div>
+                </div>
+    </main>
+
+    <!-- Page Footer -->
+    <footer class="page-footer" style="background-color: hsl(115, 66%, 34%)">
+        <div class="container">
+            <div class="row">
+                <!-- Sección de información del pie de página -->
+                <div class="col s12 m6">
+                    <h5 class="white-text">Smart Home</h5>
+                    <p class="grey-text text-lighten-4">Copyright © 2021</p>
+                </div>
+                <!-- Sección de contacto del pie de página -->
+                <div class="col s12 m6">
+                    <h5 class="white-text right-align">Contacto</h5>
+                    <p class="white-text right-align">
+                        <a class="grey-text text-lighten-3" href="mailto:mayis.villarreal@gmail.com">Email</a> |
+                        <a class="grey-text text-lighten-3" href="https://www.linkedin.com/in/maria-claudia-villarreal-ardila-83976918a/" target="_blank">LinkedIn</a>
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
-   
-  </div>
-                   
-                    <div class="input-field col s12">
-                        <select>
-                          <option value="" disabled selected>Choose your option</option>
-                          <option value="1">Option 1</option>
-                          <option value="2">Option 2</option>
-                          <option value="3">Option 3</option>
-                        </select>
-                        <label>Materialize Select</label>
-                      </div>
-                </div>
-             
+    </footer>
+</body>
 
-
-
-                <br/>
-                <h3>Smart Home Web Client!</h3>
-                <br/>
-                <div class="row">
-                    <div class="input-field col s12 m12 l12 xl12">
-                        <textarea id="textarea_1" class="materialize-textarea" style="height: 150px;" readonly></textarea>
-                    </div>
-                    <div class="col s4 m4 l2 xl2">
-                        <button class="btn waves-effect waves-light button-view" id="btnListar" name="hello_button">Listar</button>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, alias, pariatur tempore quas at iusto fugit nostrum consequuntur, quidem deleniti ad excepturi non adipisci voluptas eos nisi commodi necessitatibus dolorum.</p>
-                </div>
-            </div>	
-        </main>
-		<!-- Page Footer -->
-        <footer class="page-footer" style="background-color:#124580">
-            <div class="container">
-                <div class="row">
-                    <div class="col l6 s6">
-                        <h5 class="white-text">Smart Home</h5>
-                        <p class="grey-text text-lighten-4">Copyright ### - 2021</p>
-                    </div>
-                    <div class="col l6 s6">
-                        <h5 class="white-text right-align">Contact</h5>
-                        <p class="white-text right-align">
-                            <a class="grey-text text-lighten-3" href="!#">Email | </a>
-                            <a class="grey-text text-lighten-3" href="!#">Twitter | </a>
-                            <a class="grey-text text-lighten-3" href="!#">LinkedIn</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-		<!--JavaScript at end of body for optimized loading-->
-	
-    </body>
-  </html>
+</html>

@@ -1,162 +1,195 @@
 
-var M;
-class Main implements EventListenerObject{
-    public usuarios: Array<Usuario>= new Array<Usuario>();
-  
+declare const M;
 
-    private buscarPersonas() {
+class Main implements EventListenerObject {
+    public devicesUrl: string = "http://localhost:8000/devices";
 
-   
-        for (let u of this.usuarios) {
-            console.log(u.mostrar(),this.usuarios.length);
-        }
-    }
-    private buscarDevices() {
-        
-        let xmlRequest = new XMLHttpRequest();
-        
-        xmlRequest.onreadystatechange = () => {
-     
-            if (xmlRequest.readyState == 4) {
-                if(xmlRequest.status==200){
-                    console.log(xmlRequest.responseText, xmlRequest.readyState);    
-                    let respuesta = xmlRequest.responseText;
-                    let datos:Array<Device> = JSON.parse(respuesta);
-                    
-                    let ul = document.getElementById("listaDisp"); 
+    constructor() {
+        // Inicializar Materialize para modales
+        const elems = document.querySelectorAll('.modal');
+        M.Modal.init(elems);
 
-                    for (let d of datos) {
-                        let itemList =
-                            ` <li class="collection-item avatar">
-                        <img src="./static/images/lightbulb.png" alt="" class="circle">
-                        <span class="title">${d.name}</span>
-                        <p>
-                         ${d.description}
-                        </p>
-                        <a href="#!" class="secondary-content">
-                        <div class="switch">
-                        <label>
-                          Off
-                          <input type="checkbox"`;
-                          itemList +=`nuevoAtt="${d.id}" id="cb_${d.id}"`
-                        if (d.state) {
-                            itemList+= ` checked `
-                        }
-                        
-                        itemList+= `>
-                          <span class="lever"></span>
-                          On
-                        </label>
-                      </div>
-                        </a>
-                      </li>`
-                       
-                        ul.innerHTML += itemList;
+        // Asignar evento al botón "Agregar Dispositivo"
+        document.getElementById('btnAddDev').addEventListener('click', () => {
+            const modalInstance = M.Modal.getInstance(document.getElementById('modaladd'));
+            modalInstance.open();
+        });
 
-                    }
-                    for (let d of datos) {
-                        let checkbox = document.getElementById("cb_" + d.id);
-
-                        checkbox.addEventListener("click", this);
-                    }
-
-                }else{
-                    console.log("no encontre nada");
-                }
-            }
-            
-        }
-        xmlRequest.open("GET","http://localhost:8000/devices",true)
-        xmlRequest.send();
-    }
-
-    private ejecutarPost(id:number,state:boolean) {
-        let xmlRequest = new XMLHttpRequest();
-
-        xmlRequest.onreadystatechange = () => {
-            if (xmlRequest.readyState == 4) {
-                if (xmlRequest.status == 200) {
-                    console.log("llego resputa",xmlRequest.responseText);        
-                } else {
-                    alert("Salio mal la consulta");
-                }
-            }
-            
-            
-
-        }
-        
-       
-        xmlRequest.open("POST", "http://localhost:8000/device", true)
-        xmlRequest.setRequestHeader("Content-Type", "application/json");
-        let s = {
-            id: id,
-            state: state   };
-        xmlRequest.send(JSON.stringify(s));
-    }
-
-    private cargarUsuario(): void{
-        let iNombre =<HTMLInputElement> document.getElementById("iNombre");
-        let iPassword = <HTMLInputElement>document.getElementById("iPassword");
-        let pInfo = document.getElementById("pInfo");
-        if (iNombre.value.length > 3 && iPassword.value.length > 3) {
-            let usuari1: Usuario = new Usuario(iNombre.value, "user", iPassword.value,23);
-            this.usuarios.push(usuari1);
-            iNombre.value = "";
-            iPassword.value = "";
-           
-            
-            pInfo.innerHTML = "Se cargo correctamente!";
-            pInfo.className ="textoCorrecto";
-            
-        } else {
-            pInfo.innerHTML = "Usuairo o contraseña incorrecta!!!";
-            pInfo.className ="textoError";
-        }
-        
-        
-    }
-
-    handleEvent(object: Event): void {
-        let elemento = <HTMLElement>object.target;
-        
-        
-        if ("btnListar" == elemento.id) {
+        // Asignar evento al botón "Lista de Dispositivos"
+        document.getElementById('btnListar').addEventListener('click', () => {
             this.buscarDevices();
+        });
 
-            
-        } else if ("btnGuardar" == elemento.id) {
-            this.cargarUsuario();
-        } else if (elemento.id.startsWith("cb_")) {
-            let checkbox = <HTMLInputElement>elemento;
-            console.log(checkbox.getAttribute("nuevoAtt"),checkbox.checked, elemento.id.substring(3, elemento.id.length));
-            
-            this.ejecutarPost(parseInt(checkbox.getAttribute("nuevoAtt")),checkbox.checked);
-        }
-
+        // Inicializar Materialize para selects
+        const selectElems = document.querySelectorAll('select');
+        M.FormSelect.init(selectElems);
     }
 
+    public async buscarDevices() {
+        try {
+            const response = await fetch(this.devicesUrl);
+
+            if (response.ok) {
+                const datos: Array<Device> = await response.json();
+                this.actualizarInterfaz(datos);
+            } else {
+                console.log("Error al obtener los dispositivos:", response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+        }
+    }
+
+    private actualizarInterfaz(datos: Array<Device>) {
+        const ul = document.getElementById("devices");
+
+        if (!ul) {
+            console.error("No se encontró el elemento con id 'devices'.");
+            return;
+        }
+
+        ul.innerHTML = "";
+
+        datos.forEach((d) => {
+            const cardItem = `
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">${d.name}</span>
+                        <img src="${getImagePath(d.type)}" alt="Imagen del dispositivo ${d.name}" class="circle">
+                        <p>${d.description}</p>
+                    </div>
+                    <div class="card-action">
+                        <div class="switch">
+                            <label>
+                                Off
+                                <input type="checkbox" data-nuevo-att="${d.id}" id="cb_${d.id}" ${d.state ? "checked" : ""}>
+                                <span class="lever"></span>
+                                On
+                            </label>
+                        </div>
+                    </div>
+                </div>`;
+
+            ul.innerHTML += cardItem;
+        });
+
+        function getImagePath(type) {
+            
+                   if (type === 1) {
+                             return './static/images/a.png';
+                         } else if (type === 2) {
+                             return './static/images/b.png';
+                         } else if (type === 3) {
+                             return './static/images/p.png';
+                         } else if (type === 4) {
+                             return './static/images/tv.png';
+                         } else if (type === 5) {
+                             return './static/images/v.png';
+                         } else {
+                            
+                             return './static/images/default.png'; // Imagen por defecto si el tipo no coincide
+                         }
+                     }
+
+        // Agregar listeners después de actualizar el DOM
+        datos.forEach((d) => {
+            const checkbox = document.getElementById(`cb_${d.id}`);
+
+            if (checkbox) {
+                checkbox.addEventListener("click", this);
+            }
+        });
+    }
+
+    handleEvent(event: Event) {
+        if (event.type === "click" && event.target instanceof HTMLInputElement) {
+            const id = event.target.getAttribute("data-nuevo-att");
+            const state = event.target.checked;
+
+            if (id) {
+                this.ejecutarPost(parseInt(id, 10), state);
+            }
+        }
+    }
+
+    public initFormEvents() {
+        const btnGuardar = document.getElementById('btnGuardar');
+
+        if (btnGuardar) {
+            btnGuardar.addEventListener('click', () => {
+                this.guardarDispositivo();
+            });
+        }
+    }
+
+    private async guardarDispositivo() {
+        // Obtener valores del formulario
+        const name = (document.getElementById('txt-name') as HTMLInputElement).value;
+        const description = (document.getElementById('txt-description') as HTMLInputElement).value;
+        const type = (document.getElementById('select-type') as HTMLSelectElement).value;
+
+        // Validar los valores (puedes agregar más validaciones según tus necesidades)
+        if (!name || !description || !type) {
+            alert('Por favor, complete todos los campos del formulario.');
+            return;
+        }
+
+        // Crear objeto de datos del dispositivo
+        const nuevoDispositivo = {
+            name,
+            description,
+            type: parseInt(type),
+            state: false, // Puedes establecer un valor predeterminado o proporcionar otro mecanismo para establecer el estado
+        };
+
+        try {
+            // Realizar la solicitud POST para agregar el dispositivo
+            const response = await fetch(this.devicesUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoDispositivo),
+            });
+
+            if (response.ok) {
+                // Limpiar el formulario o realizar otras acciones necesarias después de agregar el dispositivo
+                console.log('Dispositivo agregado con éxito');
+            } else {
+                console.error('Error al agregar el dispositivo:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error en la solicitud POST:', error);
+        }
+    }
+
+
+    private async ejecutarPost(id: number, state: boolean) {
+        try {
+            const response = await fetch(this.devicesUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id, state }),
+            });
+
+            if (response.ok) {
+                console.log("La solicitud POST se completó con éxito");
+            } else {
+                console.error("Error en la solicitud POST:", response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud POST:", error);
+        }
+    }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
     
-window.addEventListener("load", () => {
-
-    var elems = document.querySelectorAll('select');
-    M.FormSelect.init(elems, "");
-    var elemsModal = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elemsModal, "");
-
-    let main1: Main = new Main();
-    let boton = document.getElementById("btnListar");
-    
-    boton.addEventListener("click", main1);   
-
-    let botonGuardar = document.getElementById("btnGuardar");
-    botonGuardar.addEventListener("click",main1);
-
-    let checkbox = document.getElementById("cb");
-    checkbox.addEventListener("click", main1);
-    
+const mainInstance = new Main();
+mainInstance.buscarDevices();
+mainInstance.initFormEvents();
 
 
 });
