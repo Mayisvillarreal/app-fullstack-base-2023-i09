@@ -32,7 +32,7 @@ nav {
 }
 
 .button-view {
-    background-color: teal;
+    background-color: hsl(115, 66%, 34%);
     color: white;
 }
 
@@ -47,8 +47,8 @@ nav {
 }
 
 .card {
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(248, 251, 249, 0.921);
+    border-radius:1px;
+    box-shadow: 0 0 10px rgba(248, 251, 249, 0.921);
 }
 
 .modal {

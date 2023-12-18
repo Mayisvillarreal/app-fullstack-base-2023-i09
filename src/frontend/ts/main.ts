@@ -23,6 +23,8 @@ class Main implements EventListenerObject {
         // Inicializar Materialize para selects
         const selectElems = document.querySelectorAll('select');
         M.FormSelect.init(selectElems);
+
+        
     }
 
     public async buscarDevices() {
@@ -39,6 +41,24 @@ class Main implements EventListenerObject {
             console.error("Error en la solicitud:", error);
         }
     }
+
+    private async eliminarDispositivo(id: number) {
+        try {
+            const response = await fetch(`${this.devicesUrl}/${id}`, {
+                method: "DELETE",
+            });
+    
+            if (response.ok) {
+                console.log(`Dispositivo con eliminado con éxito`);
+                
+            } else {
+                console.error("Error al eliminar el dispositivo:", response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud DELETE:", error);
+        }
+    }
+    
 
     private actualizarInterfaz(datos: Array<Device>) {
         const ul = document.getElementById("devices");
@@ -67,7 +87,7 @@ class Main implements EventListenerObject {
                                 On
                             </label>
                         </div>
-                    </div>
+                        </div>
                 </div>`;
 
             ul.innerHTML += cardItem;
@@ -85,10 +105,7 @@ class Main implements EventListenerObject {
                              return './static/images/tv.png';
                          } else if (type === 5) {
                              return './static/images/v.png';
-                         } else {
-                            
-                             return './static/images/default.png'; // Imagen por defecto si el tipo no coincide
-                         }
+                         } 
                      }
 
         // Agregar listeners después de actualizar el DOM
@@ -183,6 +200,8 @@ class Main implements EventListenerObject {
             console.error("Error en la solicitud POST:", error);
         }
     }
+
+    
 }
 
 document.addEventListener('DOMContentLoaded', function () {
