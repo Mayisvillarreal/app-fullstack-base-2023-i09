@@ -7,13 +7,12 @@ Web App Full Stack Base
 
 *Ayudaría mucho si apoyaras este proyecto con una ⭐ en Github!*
 
-Este proyecto es una aplicación web fullstack que se ejecuta sobre el ecosistema `Docker`. Está compuesta por un compilador de `TypeScript` que te permite utilizar este superset de JavaScript para poder programar un `cliente web`. También tiene un servicio en `NodeJS` que te permite ejecutar código en backend y al mismo tiempo disponibilizar el código del cliente web para interactar con el servicio. Además tiene una `base de datos` MySQL que puede interactuar con el backend para guardar y consultar datos, y de manera adicional trae un `administrador` de base de datos para poder administrar la base en caso que lo necesites.
+Este proyecto es una aplicación web fullstack que se ejecuta sobre el ecosistema `Docker`. Está compuesta por un compilador de `TypeScript` que  permite utilizar este superset de JavaScript para poder programar un `cliente web`. También tiene un servicio en `NodeJS` que permite ejecutar código en backend y al mismo tiempo disponibilizar el código del cliente web para interactuar con el servicio. Además tiene una `base de datos` MySQL que puede interactuar con el backend para guardar y consultar datos, y de manera adicional trae un `administrador` de base de datos para poder administrar la base en caso que lo necesites.
 
-La aplicación IoT de base que viene con este proyecto se encarga de crear una tabla llamada `Devices` en la base de datos, y la idea es que vos puedas desarrollar el código de backend y frontend que te permita controlar desde el navegador el estado de los devices de un hogar inteligente - *como pueden ser luces, TVs, ventiladores, persianas, enchufes y otros* - y almacenar los estados de cada uno en la base de datos. 
+La aplicación IoT de base que viene con este proyecto se encarga de crear una tabla llamada `Devices` en la base de datos, se desarrolló el código de backend y frontend que permite añadir desde el navegador dispositivos de un hogar inteligente - *que puenden ser luces, TVs, ventiladores, persianas, y alarmas*,
 
-Realizando estas tareas vas a a tener una aplicación fullstack IoT del mundo real que utiliza tecnologías actuales en la que un backend es capaz de interactuar con una DB para cumplir con las peticiones de control que se le mandan desde el cliente web.
+Se tiene una aplicación fullstack IoT del mundo real que utiliza tecnologías actuales en la que un backend es capaz de interactuar con una DB para cumplir con peticiones enviadas desde el cliente web.
 
-En esta imagen podés ver una posible implementación del cliente web que controla los artefactos del hogar.
 
 ![architecture](doc/webapp-example-1.png)
 
@@ -84,7 +83,7 @@ Tené en cuenta que la base de datos se crea con permisos de superusuario por lo
 
 ## Detalles principales 🔍
 
-En esta sección vas a encontrar las características más relevantes del proyecto.
+La aplicación permite incertar dispositivos a partir de un panel que se despliga una vez se hace click en el botón "añadir Dispositivo".
 
 <details><summary><b>Mira los detalles más importantes de la aplicación</b></summary><br>
 <br>
@@ -158,7 +157,7 @@ En esta sección podés ver los detalles específicos de funcionamiento del cód
 
 ### Agregar un dispositivo
 
-Completá los pasos para agregar un dispositivo desde el cliente web.
+Una vez se hace click en el botón "AÑADIR DISPOSITVO", se despliega un panel que solicita ingresar el nombre del nuevo dispositivo, una descripción y seleccionar el tipo. Una vez ingresados los datos debe oprimirse el botón guardar en la parte inferior del panel.
 
 ### Frontend
 
